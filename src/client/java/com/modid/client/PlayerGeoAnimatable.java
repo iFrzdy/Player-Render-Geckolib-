@@ -21,6 +21,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
  * Nombres de animación que se buscan en player_render.animation.json:
  *   idle, walk, run, sneak, sneak_walk   (controlador "movement")
  *   mine                                 (controlador "action", mientras el jugador golpea/mina)
+ *   bow_right, bow_left                  (controlador "item_use", mientras tensa un arco con la mano derecha / izquierda)
  * El tipo de loop sale de cada animación en el .json (true = repetir, hold_on_last_frame = mantener la pose final).
  * Las que no existan se reemplazan por la más parecida (ver FALLBACKS) o se ignoran.
  */
@@ -47,6 +48,7 @@ public class PlayerGeoAnimatable implements GeoReplacedEntity {
         // Orden importa: "action" se registra después, así que pisa a "movement" en los huesos que ambos animan.
         controllers.add(new AnimationController<PlayerGeoAnimatable>("movement", 4, this::movementState));
         controllers.add(new AnimationController<PlayerGeoAnimatable>("action", 2, this::actionState));
+        controllers.add(new AnimationController<PlayerGeoAnimatable>("item_use", 3, this::itemUseState));
     }
 
     private PlayState movementState(AnimationTest<PlayerGeoAnimatable> test) {
@@ -84,6 +86,22 @@ public class PlayerGeoAnimatable implements GeoReplacedEntity {
         }
 
         return test.setAndContinue(PLAYS.computeIfAbsent("mine", n -> RawAnimation.begin().thenPlay(n)));
+    }
+
+    private PlayState itemUseState(AnimationTest<PlayerGeoAnimatable> test) {
+        String name = null;
+
+        if (test.getDataOrDefault(PlayerDataTickets.BOW_IN_RIGHT_HAND, false)) {
+            name = "bow_right";
+        } else if (test.getDataOrDefault(PlayerDataTickets.BOW_IN_LEFT_HAND, false)) {
+            name = "bow_left";
+        }
+
+        if (name == null || !PlayerGeoModel.hasAnimation(name)) {
+            return PlayState.STOP;
+        }
+
+        return test.setAndContinue(PLAYS.computeIfAbsent(name, n -> RawAnimation.begin().thenPlay(n)));
     }
 
     @Override
