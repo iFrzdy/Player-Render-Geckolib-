@@ -19,8 +19,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
  * GeckoLib 5 NO permite usar la entidad directamente, por eso existe este singleton aparte.
  *
  * Nombres de animación que se buscan en player_render.animation.json:
- *   idle, walk, run, sneak, sneak_walk   (controlador "movement", en loop)
+ *   idle, walk, run, sneak, sneak_walk   (controlador "movement")
  *   mine                                 (controlador "action", mientras el jugador golpea/mina)
+ * El tipo de loop sale de cada animación en el .json (true = repetir, hold_on_last_frame = mantener la pose final).
  * Las que no existan se reemplazan por la más parecida (ver FALLBACKS) o se ignoran.
  */
 public class PlayerGeoAnimatable implements GeoReplacedEntity {
@@ -32,7 +33,7 @@ public class PlayerGeoAnimatable implements GeoReplacedEntity {
             "walk", "idle"
     );
 
-    private static final Map<String, RawAnimation> LOOPS = new HashMap<>();
+    private static final Map<String, RawAnimation> PLAYS = new HashMap<>();
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -72,7 +73,7 @@ public class PlayerGeoAnimatable implements GeoReplacedEntity {
             return PlayState.STOP;
         }
 
-        return test.setAndContinue(LOOPS.computeIfAbsent(name, n -> RawAnimation.begin().thenLoop(n)));
+        return test.setAndContinue(PLAYS.computeIfAbsent(name, n -> RawAnimation.begin().thenPlay(n)));
     }
 
     private PlayState actionState(AnimationTest<PlayerGeoAnimatable> test) {
@@ -82,7 +83,7 @@ public class PlayerGeoAnimatable implements GeoReplacedEntity {
             return PlayState.STOP;
         }
 
-        return test.setAndContinue(LOOPS.computeIfAbsent("mine", n -> RawAnimation.begin().thenLoop(n)));
+        return test.setAndContinue(PLAYS.computeIfAbsent("mine", n -> RawAnimation.begin().thenPlay(n)));
     }
 
     @Override
