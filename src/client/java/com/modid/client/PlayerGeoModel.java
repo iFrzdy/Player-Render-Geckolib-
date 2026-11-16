@@ -4,6 +4,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.animatable.processing.AnimationState;
 import software.bernie.geckolib.cache.GeckoLibResources;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.loading.object.BakedAnimations;
 import software.bernie.geckolib.model.GeoModel;
@@ -65,9 +66,18 @@ public class PlayerGeoModel extends GeoModel<PlayerGeoAnimatable> {
         float yaw = animationState.getData(DataTickets.ENTITY_YAW);
 
         for (String boneName : HEAD_BONES) {
-            getBone(boneName).ifPresent(bone -> {
-                bone.setRotX(-pitch * Mth.DEG_TO_RAD);
-                bone.setRotY(-yaw * Mth.DEG_TO_RAD);
+            getBone(boneName).ifPresent(head -> {
+                // La cabeza es hija del torso: si el torso se inclina (agacharse), la cabeza se inclina con él.
+                // Le restamos la rotación de sus huesos padres para que siga mirando hacia donde apunta la cámara.
+                float parentRotX = 0f;
+                float parentRotY = 0f;
+                for (GeoBone parent = head.getParent(); parent != null; parent = parent.getParent()) {
+                    parentRotX += parent.getRotX();
+                    parentRotY += parent.getRotY();
+                }
+
+                head.setRotX(-pitch * Mth.DEG_TO_RAD - parentRotX);
+                head.setRotY(-yaw * Mth.DEG_TO_RAD - parentRotY);
             });
         }
     }
