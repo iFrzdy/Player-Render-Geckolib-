@@ -36,7 +36,7 @@
 				{
 					"name": "right_item",
 					"parent": "right_arm",
-					"pivot": [0, 0, 0],
+					"pivot": [-6.5, 12.5, -2],
 					"cubes": [
 						{"origin": [-7, 12, -3], "size": [1, 1, 2], "inflate": 0.25, "uv": [43, 34]}
 					]
@@ -53,7 +53,7 @@
 				{
 					"name": "left_item",
 					"parent": "left_arm",
-					"pivot": [0, 0, 0],
+					"pivot": [5.5, 12.5, -2],
 					"cubes": [
 						{"origin": [5, 12, -3], "size": [1, 1, 2], "inflate": 0.25, "uv": [43, 34]}
 					]
@@ -66,6 +66,11 @@
 						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 0]},
 						{"origin": [-4, 24, -4], "size": [8, 8, 8], "inflate": 0.25, "uv": [32, 0]}
 					]
+				},
+				{
+					"name": "torso_armor",
+					"parent": "torso",
+					"pivot": [0, 24, 0]
 				},
 				{
 					"name": "right_leg",

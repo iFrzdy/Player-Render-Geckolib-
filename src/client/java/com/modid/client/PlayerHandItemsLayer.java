@@ -95,14 +95,14 @@ public class PlayerHandItemsLayer<R extends GeoRenderState> extends BlockAndItem
             poseStack.translate(0, 0.125f, -0.0625f);
 
             if (stack.getItem() instanceof ShieldItem) {
-                poseStack.translate(0, 0.150, -0.25);
+                poseStack.translate(0, 0.125, -0.25);
             }
         } else if (displayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
             poseStack.mulPose(Axis.XP.rotationDegrees(-90f));
-            poseStack.translate(0, 0.150f, -0.0625f);
+            poseStack.translate(0, 0.125f, -0.0625f);
 
             if (stack.getItem() instanceof ShieldItem) {
-                poseStack.translate(0, 0.150, 0.25);
+                poseStack.translate(0, 0.125, 0.25);
                 poseStack.mulPose(Axis.YP.rotationDegrees(180));
             }
         }

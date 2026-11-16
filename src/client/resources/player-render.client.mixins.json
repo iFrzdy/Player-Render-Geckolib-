@@ -3,7 +3,10 @@
 	"package": "com.modid.client.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"client": [
-		"EntityRenderDispatcherMixin"
+		"EntityRenderDispatcherMixin",
+		"EntityRenderDispatcherMixin",
+		"ExampleClientMixin",
+		"ModelPartAccessor"
 	],
 	"injectors": {
 		"defaultRequire": 1

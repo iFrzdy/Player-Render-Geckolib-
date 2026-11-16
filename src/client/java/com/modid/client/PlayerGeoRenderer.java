@@ -21,6 +21,7 @@ public class PlayerGeoRenderer<R extends LivingEntityRenderState & GeoRenderStat
         super(context, new PlayerGeoModel(), new PlayerGeoAnimatable());
 
         addRenderLayer(new PlayerHandItemsLayer<>(this));
+        addRenderLayer(new PlayerArmorLayer<>(this, context));
     }
 
     /**
